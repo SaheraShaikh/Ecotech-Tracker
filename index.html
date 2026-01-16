@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>EcoTechTracker — Demo</title>
+<link rel="icon" type="image/png"  href="fevico.png">
+<style>
+:root{
+  --bg:#0f1724;
+  --card:#0b1220;
+  --muted:rgba(255,255,255,0.75);
+  --accent:#22c55e;
+  --glass:rgba(255,255,255,0.03);
+}
+*{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;}
+body{
+  margin:0;
+  background: linear-gradient(135deg, #0f1724 0%, #1e293b 50%, #0f1724 100%);
+  color:#ffffff;
+  min-height:100vh;
+  padding:0;
+}
+.app{
+  width:100%;
+  animation: fadeInUp 0.8s ease-out;
+  border-radius:0;
+  padding:20px;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 6px 30px rgba(2,6,23,0.7);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+}
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(2,6,23,0.9);
+}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+#header-actions { display: flex; align-items: center; gap: 12px; }
+h1{
+  font-size:20px;
+  margin:0;
+  cursor:pointer;
+  transition: color 0.3s ease;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+h1:hover{color:var(--accent);}
+small{color:var(--muted);}
+.grid{display:grid;grid-template-columns:1fr;gap:18px;}
+.panel{
+  padding:16px;
+  border-radius:10px;
+  background:var(--card);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(2,6,23,0.5);
+}
+.panel:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(2,6,23,0.7);
+}
+label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px;}
+input[type="text"], input[type="password"], input[type="number"], select{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.04);
+  background:transparent;
+  color:#ffffff;
+}
+button{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.04);
+  background:transparent;
+  color:#ffffff;
+  cursor:pointer;
+  box-shadow: 0 0 10px rgba(34,197,94,0.5);
+  transition: all 0.3s ease;
+}
+button:hover{
+  background: var(--accent);
+  color: #031018;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(34,197,94,0.6);
+}
+.muted{color:var(--muted);font-size:13px;}
+.btn{
+  background:transparent;
+  color:#ffffff;
+  border:1px solid rgba(255,255,255,0.04);
+  cursor:pointer;
+  padding:10px;
+  border-radius:8px;
+  font-weight:600;
+  box-shadow: 0 0 10px rgba(34,197,94,0.5);
+  transition: all 0.3s ease;
+}
+.btn:hover{
+  background: var(--accent);
+  color: #031018;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(34,197,94,0.6);
+}
+.btn-ghost{
+  background:transparent;
+  color:#ffffff;
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 0 10px rgba(34,197,94,0.5);
+  transition: all 0.3s ease;
+}
+.btn-ghost:hover{
+  background: var(--accent);
+  color: #031018;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(34,197,94,0.6);
+}
+nav{display:flex;gap:8px;}
+nav button{
+  padding:8px 12px;
+  border-radius:8px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.03);
+  color:#ffffff;
+  cursor:pointer;
+  box-shadow: 0 0 10px rgba(34,197,94,0.5);
+  transition: all 0.3s ease;
+}
+nav button:hover{
+  background: var(--accent);
+  color: #031018;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(34,197,94,0.6);
+}
+nav button.active{
+  background:rgba(34,197,94,0.1);
+  color:var(--accent);
+  border-color:rgba(34,197,94,0.18);
+  box-shadow: 0 0 15px rgba(34,197,94,0.8);
+}
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:linear-gradient(180deg,#05202a,#06262f);
+  padding:12px 14px;
+  border-radius:10px;
+  box-shadow:0 6px 30px rgba(2,6,23,0.6);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+/* responsive */
+@media (max-width:900px){
+  .grid{grid-template-columns:1fr;}
+  .app{padding:12px;}
+}
+/* small helpers */
+.row{display:flex;gap:8px;align-items:center;}
+.stat{background:var(--glass);padding:12px;border-radius:10px;}
+.hour-inputs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.linklike{background:transparent;border:none;color:var(--accent);cursor:pointer;}
+footer{margin-top:14px;color:var(--muted);font-size:13px;}
+
+/* Profile dropdown styles */
+.profile-container { position: relative; display: inline-block; }
+.profile-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  color: #031018;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+.profile-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: var(--card);
+  border-radius: 8px;
+  box-shadow: 0 6px 30px rgba(2,6,23,0.7);
+  min-width: 200px;
+  display: none;
+  z-index: 1000;
+}
+.profile-dropdown.show { display: block; }
+.profile-dropdown-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  cursor: pointer;
+  color: #ffffff;
+  transition: background 0.2s;
+}
+.profile-dropdown-item:hover { background: rgba(255,255,255,0.05); }
+.profile-dropdown-item:last-child { border-bottom: none; }
+.profile-dropdown-item.danger { color: #ef4444; }
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+}
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2001;
+}
+.modal-content {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 6px 30px rgba(2,6,23,0.7);
+  animation: modalFadeIn 0.3s ease-out;
+}
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Override inline select styles to ensure white text */
+select{ background:beige !important; color:black !important; border:1px solid rgba(255,255,255,0.06) !important; }
+option{ background:beige !important; color:black !important; }
+
+/* Ensure other interactive elements use white text */
+input, textarea, button, label, small, .muted { color: #ffffff !important; }
+</style>
+</head>
+<body>
+<div class="app card">
+<header>
+  <div>
+    <h1 onclick="showSection('app'); setActiveNav('nav-dashboard')">EcoTechTracker</h1>
+    <small>Track device usage · estimate carbon · get smart reminders</small>
+  </div>
+  <div id="header-actions">
+    <a href="admin.html" style="color: var(--accent); font-size: 12px; text-decoration: none; margin-left: 10px;">Admin</a>
+  </div>
+</header>
+
+<main>
+
+<!-- AUTH SECTION -->
+<section id="auth-section" class="card">
+  <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
+
+    <!-- LOGIN PANEL -->
+    <div id="login-panel" style="flex:1;min-width:260px">
+      <h3 style="margin:0 0 8px 0">Login</h3>
+      <label>Username</label><input id="login-username" type="text" />
+      <label>Password</label><input id="login-password" type="password" />
+      <div style="margin-top:5px;text-align:left">
+        <a href="#" id="forget-password" style="color: var(--accent); text-decoration: none; font-size: 14px;">Forget Password?</a>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button class="btn" id="btn-login">Login</button>
+        <button class="btn-ghost" id="show-signup">Sign up</button>
+      </div>
+    </div>
+
+    <div style="width:1px;background:rgba(255,255,255,0.03);height:150px"></div>
+
+    <!-- SIGNUP PANEL -->
+    <div id="signup-panel" style="width:320px; display:none;">
+      <h3 style="margin:0 0 8px 0">Create account</h3>
+      <label>Pick a username</label><input id="signup-username" type="text" />
+      <label>Pick a password</label><input id="signup-password" type="password" />
+      <label>Display name (optional)</label><input id="signup-display" type="text" />
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button class="btn" id="btn-signup">Create</button>
+        <button class="btn-ghost" id="show-login">Back to login</button>
+      </div>
+      <p class="muted" style="margin-top:10px;font-size:12px">Use atleast 8 characters with letters and numbers for your password </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- APP SECTION -->
+<section id="app-section" style="display:none">
+  <nav style="margin-bottom:12px">
+    <button id="nav-dashboard" class="active">Dashboard</button>
+    <button id="nav-history">History</button>
+  </nav>
+
+  <div class="grid">
+    <div>
+      <div class="panel">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <div id="profile-photo-container"></div>
+          <h2 style="margin:0">Welcome, <span id="display-name">User</span></h2>
+        </div>
+        <p class="muted">Quick actions and live logging</p>
+
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap ">
+          <select id="device-type" style="background:#000000; color:#ffffff; border:1px solid #ccc;">
+  <option value="mobile">Mobile phone</option>
+  <option value="tablet">Tablet</option>
+  <option value="laptop">Laptop</option>
+</select>
+
+
+          <input id="minutes-used" type="number" placeholder="Minutes used now" min="1" />
+          <button class="btn" id="log-now">Log usage</button>
+          <button class="btn-ghost" id="auto-distribute">Auto-distribute sample</button>
+        </div>
+
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+          <div class="stat"><div class="muted">Last log</div><div id="last-log">—</div></div>
+          <div class="stat"><div class="muted">Today CO₂</div><div id="today-co2">0 kg</div></div>
+          <div class="stat"><div class="muted">Monthly est.</div><div id="monthly-co2">0 kg</div></div>
+        </div>
+
+        <hr style="margin:12px 0 8px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+
+        <div>
+          <label>Notification frequency (in minutes)</label>
+          <input id="notif-mins" type="number" value="60" min="1" />
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button class="btn" id="start-notifs">Start reminders</button>
+            <button class="btn-ghost" id="stop-notifs">Stop</button>
+          </div>
+          <p class="muted" style="margin-top:8px">Reminder message will suggest power-saving tips every interval while this page is open.</p>
+        </div>
+
+      </div>
+
+      <div class="panel" style="margin-top:12px">
+        <h3 style="margin:0">Usage graph (last 24 hours)</h3>
+        <canvas id="usageChart" width="800" height="220" style="width:100%;height:220px;background:transparent;margin-top:8px;border-radius:8px"></canvas>
+        <div id="chart-legend" class="muted" style="margin-top:8px">Minutes per day (current month)</div>
+      </div>
+
+      <div class="panel" style="margin-top:12px">
+        <h3 style="margin:0">Carbon calculator</h3>
+        <p class="muted">Estimate is based on device power assumptions and an emission factor.</p>
+        <label>Device power (auto)</label>
+        <div class="row" style="gap:8px;margin-bottom:8px">
+          <input id="power-w" type="number" placeholder="Watt (auto)" readonly />
+          <button class="btn-ghost" id="reset-power">Reset</button>
+        </div>
+        
+        <input id="emission-factor" type="number" value="0.5" step="0.01" style="display:none;" />
+        <div style="margin-top:10px" class="muted">Daily usage hours</div>
+        <input id="daily-hours" type="number" value="1" min="0" step="0.1" />
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <button class="btn" id="calc-co2">Calculate</button>
+          <button class="btn-ghost" id="save-daily">Save to profile</button>
+        </div>
+        <div style="margin-top:12px">
+          <div class="muted">Result</div>
+          <div id="calc-result">—</div>
+        </div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+
+        <button class="btn" id="export-csv" style="display:none;">Export history (CSV)</button>
+      </div>
+
+      <div class="panel" style="margin-top:12px">
+        <h3 style="margin:0">Eco Tips</h3>
+        <ul class="muted" style="padding-left:20px;margin:8px 0">
+          <li>Unplug devices when not in use to save energy.</li>
+          <li>Use power-saving modes on your electronics.</li>
+          <li>Opt for energy-efficient appliances.</li>
+          <li>Track and reduce screen time to lower consumption.</li>
+          <li>Consider renewable energy sources for charging.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="card" style="margin-top:14px; text-align: center;">
+    "Every device you track is a step towards a greener planet. Small actions, big impact."
+  </footer>
+</section>
+
+<!-- HISTORY SECTION -->
+<section id="history-section" style="display:none;margin-top:12px">
+  <div class="card panel">
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <button class="btn-ghost" disabled>History</button>
+      <button class="btn-ghost" onclick="showSection('app'); setActiveNav('nav-dashboard')">← Back to Dashboard</button>
+    </div>
+    <p class="muted">All logged usage entries (click delete to remove one)</p>
+    <div id="history-list" style="margin-top:10px;max-height:320px;overflow:auto"></div>
+    <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+    <h4>Hourly summary (automated)</h4>
+    <p class="muted">Usage aggregated by hour from your logged entries</p>
+    <div class="hour-summary" id="hour-summary" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px"></div>
+    <div style="margin-top:8px;display:flex;gap:8px">
+      <button class="btn-ghost" id="clear-history">Clear all</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- MODALS -->
+<div id="modal-overlay" class="modal-overlay" style="display:none;"></div>
+
+<!-- Personal Details Modal -->
+<div id="personal-details-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3>Personal Details</h3>
+    <label>Display Name</label>
+    <input id="edit-display-name" type="text" />
+    <label>Email (optional)</label>
+    <input id="edit-email" type="email" style="color: black; background: rgb(0, 0, 0);" />
+    <label>Profile Photo</label>
+    <input id="edit-photo" type="file" accept="image/*" />
+
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn-ghost" onclick="closeModal('personal-details-modal')">Cancel</button>
+      <button class="btn" id="save-personal-details">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Settings Modal -->
+<div id="privacy-settings-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3>Privacy Settings</h3>
+    <div style="margin-bottom:12px;">
+      <label style="display:flex;align-items:center;gap:8px;">
+        <input id="public-profile" type="checkbox" />
+        Make profile public
+      </label>
+      <p class="muted" style="margin:4px 0 0 24px;font-size:12px">Allow others to see your achievements and stats</p>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="display:flex;align-items:center;gap:8px;">
+        <input id="data-sharing" type="checkbox" />
+        Share usage data for research
+      </label>
+      <p class="muted" style="margin:4px 0 0 24px;font-size:12px">Help improve the app by sharing anonymized data</p>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn-ghost" onclick="closeModal('privacy-settings-modal')">Cancel</button>
+      <button class="btn" id="save-privacy-settings">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Password Modal -->
+<div id="password-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3>Change Password</h3>
+    <label>Current Password</label>
+    <input id="current-password" type="password" />
+    <label>New Password</label>
+    <input id="new-password" type="password" />
+    <label>Confirm New Password</label>
+    <input id="confirm-password" type="password" />
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn-ghost" onclick="closeModal('password-modal')">Cancel</button>
+      <button class="btn" id="save-password">Change Password</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-area"></div>
+</div>
+
+<script>
+// ---------------------------- Utilities & storage ----------------------------
+// Calculate CO₂ in kg
+// minutes: number of minutes device was used
+// powerW: device power in Watts
+// emissionFactor: e.g., 0.5 kg/kWh
+function calculateCO2(minutes, powerW, emissionFactor){
+    // Convert Watts to kW (divide by 1000), multiply by hours, then emission factor
+    const hours = minutes / 60;
+    const powerKW = powerW / 1000;
+    return hours * powerKW * emissionFactor;
+}
+
+
+function uid(){return Math.random().toString(36).slice(2,9);}
+const USERS_KEY = 'ecotech_users_v1';
+function loadUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY)||'{}')}catch(e){return {}}}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u))}
+function saveProfile(username,data){localStorage.setItem('ecotech_profile_'+username,JSON.stringify(data))}
+function loadProfile(username){try{return JSON.parse(localStorage.getItem('ecotech_profile_'+username)||'null')}catch(e){return null}}
+function saveLogs(username,logs){localStorage.setItem('ecotech_logs_'+username,JSON.stringify(logs))}
+function loadLogs(username){try{return JSON.parse(localStorage.getItem('ecotech_logs_'+username)||'[]')}catch(e){return []}}
+
+// Update profile display (name and photo)
+function updateProfileDisplay(profile) {
+  const displayNameEl = document.getElementById('display-name');
+  if (displayNameEl) {
+    displayNameEl.textContent = profile.display || 'User';
+  }
+  const photoContainer = document.getElementById('profile-photo-container');
+  if (photoContainer) {
+    if (profile.photo) {
+      photoContainer.innerHTML = `<img src="${profile.photo}" alt="Profile Photo" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">`;
+    } else {
+      photoContainer.innerHTML = '<div style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; color: #031018; font-weight: bold;">' + (profile.display ? profile.display.charAt(0).toUpperCase() : 'U') + '</div>';
+    }
+  }
+}
+
+// ---------------------------- Auth flow ----------------------------
+function validatePassword(password) {
+  if (password.length < 8) {
+    return 'the password should contain minimum 8 characters';
+  }
+  if (!/[a-zA-Z]/.test(password)) {
+    return 'password should contain letters';
+  }
+  if (!/[0-9]/.test(password)) {
+    return 'password should contain numbers';
+  }
+  if (/[^a-zA-Z0-9]/.test(password)) {
+    return 'no special symbol should be used';
+  }
+  return null; // valid
+}
+
+document.getElementById('btn-signup').addEventListener('click',()=>{
+  const u=document.getElementById('signup-username').value.trim();
+  const p=document.getElementById('signup-password').value.trim();
+  const d=document.getElementById('signup-display').value.trim()||u;
+  if(!u||!p){alert('Enter username and password');return}
+  const passwordError = validatePassword(p);
+  if (passwordError) {
+    alert(passwordError);
+    return;
+  }
+  const users=loadUsers();
+  if(users[u]){alert('Username exists');return}
+  users[u]={pwd:p,display:d};
+  saveUsers(users);
+  saveProfile(u,{display:d,defaultPower:5,dailyHours:1,emissionFactor:0.5});
+  alert('Account created — now login');
+  showLogin();
+});
+
+document.getElementById('btn-login').addEventListener('click',()=>{
+  const u=document.getElementById('login-username').value.trim();
+  const p=document.getElementById('login-password').value.trim();
+  if (!u || !p) { alert('Enter username and password'); return; }
+
+  // Check if locked out
+  const lockoutKey = 'login_lockout_' + u;
+  const lockoutTime = localStorage.getItem(lockoutKey);
+  if (lockoutTime && Date.now() < parseInt(lockoutTime)) {
+    const remaining = Math.ceil((parseInt(lockoutTime) - Date.now()) / 1000);
+    alert(`Too many failed attempts. Try again in ${remaining} seconds.`);
+    return;
+  }
+
+  const users=loadUsers();
+  if(users[u] && users[u].pwd===p){
+    // Successful login, reset attempts
+    localStorage.removeItem('login_attempts_' + u);
+    localStorage.removeItem(lockoutKey);
+    sessionStorage.setItem('ecotech_current',u);
+    initApp();
+  } else {
+    // Failed login, increment attempts
+    const attemptKey = 'login_attempts_' + u;
+    let attempts = parseInt(localStorage.getItem(attemptKey) || 0) + 1;
+    localStorage.setItem(attemptKey, attempts);
+    if (attempts >= 3) {
+      const lockoutUntil = Date.now() + 45000; // 45 seconds
+      localStorage.setItem(lockoutKey, lockoutUntil);
+      localStorage.removeItem(attemptKey);
+      alert('Too many failed attempts. Account locked for 45 seconds.');
+    } else {
+      alert(`Invalid login. ${3 - attempts} attempts remaining.`);
+    }
+  }
+});
+
+document.getElementById('forget-password').addEventListener('click', (e) => {
+  e.preventDefault();
+  const username = prompt('Enter your username to reset password:');
+  if (!username) return;
+  const users = loadUsers();
+  if (!users[username]) {
+    alert('Username not found.');
+    return;
+  }
+  const newPassword = 'reset123';
+  users[username].pwd = newPassword;
+  saveUsers(users);
+  alert(`Password reset successful! Your new password is: ${newPassword}\nPlease change it after logging in.`);
+});
+
+document.getElementById('show-signup').addEventListener('click',showSignup);
+document.getElementById('show-login').addEventListener('click',showLogin);
+
+function showSignup(){
+  document.getElementById('auth-section').style.display='block';
+  document.getElementById('login-panel').style.display='none';
+  document.getElementById('signup-panel').style.display='block';
+}
+
+function showLogin(){
+  document.getElementById('auth-section').style.display='block';
+  document.getElementById('login-panel').style.display='block';
+  document.getElementById('signup-panel').style.display='none';
+}
+
+function showApp(){
+  document.getElementById('auth-section').style.display='none';
+  document.getElementById('app-section').style.display='block';
+}
+
+// ---------------------------- Init App ----------------------------
+function initApp(){
+  const cur=sessionStorage.getItem('ecotech_current'); 
+  if(!cur) return;
+  showApp();
+  const p=loadProfile(cur)||{};
+  updateProfileDisplay(p);
+  document.getElementById('power-w').value=p.defaultPower||5;
+  document.getElementById('daily-hours').value=p.dailyHours||1;
+  document.getElementById('emission-factor').value=p.emissionFactor||0.5;
+  renderHeader();
+  renderChart();
+  renderHistory();
+  renderHourlySummary();
+  updateStats();
+}
+
+// Modal event listeners
+document.getElementById('save-personal-details').addEventListener('click', () => {
+  const cur = sessionStorage.getItem('ecotech_current');
+  if (!cur) return;
+  const display = document.getElementById('edit-display-name').value.trim();
+  const email = document.getElementById('edit-email').value.trim();
+  const photoInput = document.getElementById('edit-photo');
+  const p = loadProfile(cur) || {};
+  p.display = display || cur;
+  p.email = email;
+  
+  const saveAndUpdate = () => {
+    saveProfile(cur, p);
+    updateProfileDisplay(p);
+    showToast('Personal details saved');
+    closeModal('personal-details-modal');
+  };
+  
+  if (photoInput && photoInput.files && photoInput.files[0]) {
+    const file = photoInput.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      p.photo = e.target.result;
+      saveAndUpdate();
+    };
+    reader.onerror = function() {
+      showToast('Error reading photo file');
+      saveAndUpdate();
+    };
+    reader.readAsDataURL(file);
+  } else {
+    saveAndUpdate();
+  }
+});
+
+document.getElementById('save-privacy-settings').addEventListener('click', () => {
+  const cur = sessionStorage.getItem('ecotech_current');
+  if (!cur) return;
+  const p = loadProfile(cur) || {};
+  p.publicProfile = document.getElementById('public-profile').checked;
+  p.dataSharing = document.getElementById('data-sharing').checked;
+  saveProfile(cur, p);
+  showToast('Privacy settings saved');
+  closeModal('privacy-settings-modal');
+});
+
+document.getElementById('save-password').addEventListener('click', () => {
+  const cur = sessionStorage.getItem('ecotech_current');
+  if (!cur) return;
+  const currentPwd = document.getElementById('current-password').value;
+  const newPwd = document.getElementById('new-password').value;
+  const confirmPwd = document.getElementById('confirm-password').value;
+  
+  const users = loadUsers();
+  if (users[cur].pwd !== currentPwd) {
+    alert('Current password is incorrect');
+    return;
+  }
+  if (newPwd !== confirmPwd) {
+    alert('New passwords do not match');
+    return;
+  }
+  if (newPwd.length < 1) {
+    alert('Password cannot be empty');
+    return;
+  }
+  users[cur].pwd = newPwd;
+  saveUsers(users);
+  showToast('Password changed successfully');
+  closeModal('password-modal');
+});
+
+// Header
+function renderHeader(){
+  const cur=sessionStorage.getItem('ecotech_current');
+  const h=document.getElementById('header-actions'); 
+  h.innerHTML='';
+
+  // Profile container
+  const profileContainer = document.createElement('div');
+  profileContainer.className = 'profile-container';
+
+  // Profile button (circle with first letter)
+  const profileBtn = document.createElement('button');
+  profileBtn.className = 'profile-btn';
+  profileBtn.textContent = (cur || 'U').charAt(0).toUpperCase();
+  profileBtn.onclick = () => {
+    const dropdown = profileContainer.querySelector('.profile-dropdown');
+    if (dropdown) {
+      dropdown.classList.toggle('show');
+    }
+  };
+  profileContainer.appendChild(profileBtn);
+
+  // Dropdown menu
+  const dropdown = document.createElement('div');
+  dropdown.className = 'profile-dropdown';
+
+  // Personal Details
+  const personalDetails = document.createElement('div');
+  personalDetails.className = 'profile-dropdown-item';
+  personalDetails.textContent = 'Personal Details';
+  personalDetails.onclick = () => {
+    openModal('personal-details-modal');
+    const p = loadProfile(cur) || {};
+    document.getElementById('edit-display-name').value = p.display || cur;
+    document.getElementById('edit-email').value = p.email || '';
+    const photoInput = document.getElementById('edit-photo');
+    if (photoInput) {
+      photoInput.value = '';
+    }
+  };
+  dropdown.appendChild(personalDetails);
+
+  // Privacy Settings
+  const privacySettings = document.createElement('div');
+  privacySettings.className = 'profile-dropdown-item';
+  privacySettings.textContent = 'Privacy Settings';
+  privacySettings.onclick = () => {
+    openModal('privacy-settings-modal');
+    const p = loadProfile(cur) || {};
+    document.getElementById('public-profile').checked = p.publicProfile || false;
+    document.getElementById('data-sharing').checked = p.dataSharing || false;
+  };
+  dropdown.appendChild(privacySettings);
+
+  // Password
+  const password = document.createElement('div');
+  password.className = 'profile-dropdown-item';
+  password.textContent = 'Password';
+  password.onclick = () => {
+    openModal('password-modal');
+    document.getElementById('current-password').value = '';
+    document.getElementById('new-password').value = '';
+    document.getElementById('confirm-password').value = '';
+  };
+  dropdown.appendChild(password);
+
+  // Achievements/Badges
+  const achievements = document.createElement('div');
+  achievements.className = 'profile-dropdown-item';
+  const logs = loadLogs(cur);
+  const p = loadProfile(cur);
+  const now = new Date();
+  const thisMonthLogs = logs.filter(l => {
+    const logDate = new Date(l.t);
+    return logDate.getMonth() === now.getMonth() && logDate.getFullYear() === now.getFullYear();
+  });
+  const monthCO2 = (thisMonthLogs.reduce((a,l)=>a+l.minutes/60*(p.defaultPower||5)*(p.emissionFactor||0.5),0)).toFixed(2);
+  achievements.textContent = `Achievements: Reduced ${monthCO2} kg CO₂ this month`;
+  achievements.onclick = () => {
+    alert(`You've reduced ${monthCO2} kg of CO₂ this month! Keep up the good work!`);
+    dropdown.classList.remove('show');
+  };
+  dropdown.appendChild(achievements);
+
+  // Delete Account
+  const deleteAccount = document.createElement('div');
+  deleteAccount.className = 'profile-dropdown-item danger';
+  deleteAccount.textContent = 'Delete Account';
+  deleteAccount.onclick = () => {
+    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      const users = loadUsers();
+      delete users[cur];
+      saveUsers(users);
+      localStorage.removeItem('ecotech_profile_' + cur);
+      localStorage.removeItem('ecotech_logs_' + cur);
+      sessionStorage.removeItem('ecotech_current');
+      location.reload();
+    }
+    dropdown.classList.remove('show');
+  };
+  dropdown.appendChild(deleteAccount);
+
+  // Logout
+  const logout = document.createElement('div');
+  logout.className = 'profile-dropdown-item';
+  logout.textContent = 'Logout';
+  logout.onclick = () => {
+    sessionStorage.removeItem('ecotech_current');
+    location.reload();
+  };
+  dropdown.appendChild(logout);
+
+  profileContainer.appendChild(dropdown);
+  h.appendChild(profileContainer);
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!profileContainer.contains(e.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+}
+
+// Modal functions
+function openModal(modalId) {
+  document.getElementById('modal-overlay').style.display = 'block';
+  document.getElementById(modalId).style.display = 'block';
+}
+
+function closeModal(modalId) {
+  document.getElementById('modal-overlay').style.display = 'none';
+  document.getElementById(modalId).style.display = 'none';
+}
+
+// Close modal when clicking overlay
+document.getElementById('modal-overlay').addEventListener('click', () => {
+  document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
+  document.getElementById('modal-overlay').style.display = 'none';
+});
+
+// ---------------------------- NAV ----------------------------
+document.getElementById('nav-dashboard').addEventListener('click',()=>{showSection('app');setActiveNav('nav-dashboard')});
+document.getElementById('nav-history').addEventListener('click',()=>{showSection('history');setActiveNav('nav-history')});
+
+function showSection(s){
+  document.getElementById('app-section').style.display = (s==='app') ? 'block':'none';
+  document.getElementById('history-section').style.display=(s==='history')?'block':'none';
+}
+function setActiveNav(id){
+  ['nav-dashboard','nav-history'].forEach(x=>document.getElementById(x).classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ---------------------------- Logging + history ----------------------------
+document.getElementById('log-now').addEventListener('click',()=>{
+  const cur=sessionStorage.getItem('ecotech_current'); if(!cur) return alert('Login');
+  const mins=parseInt(document.getElementById('minutes-used').value)||0; if(mins<=0) return alert('Enter minutes');
+  const device=document.getElementById('device-type').value;
+  const logs=loadLogs(cur);
+  logs.push({id:uid(),device,minutes:mins,t:Date.now()});
+  saveLogs(cur,logs); showToast('Logged '+mins+' min');
+  document.getElementById('minutes-used').value='';
+  renderChart(); renderHistory(); updateStats();
+});
+
+document.getElementById('auto-distribute').addEventListener('click',()=>{
+  const cur=sessionStorage.getItem('ecotech_current'); if(!cur) return;
+  const logs=[]; const device=document.getElementById('device-type').value;
+  const now = Date.now();
+  // Generate sample entries across the last 24 hours. Use milliseconds correctly.
+  for(let h=0; h<24; h++){
+    if(Math.random()<0.4){
+      // place the log somewhere within that hour (random offset up to 1 hour)
+      const offset = Math.floor(Math.random()*3600*1000);
+      const t = now - (h * 3600 * 1000) - offset;
+      logs.push({id:uid(), device, minutes: Math.round(Math.random()*40), t});
+    }
+  }
+  saveLogs(cur,logs); renderChart(); renderHistory(); renderHourlySummary(); updateStats(); showToast('Sample data created');
+});
+
+function renderHistory(){
+  const cur=sessionStorage.getItem('ecotech_current'); if(!cur) return;
+  const logs=loadLogs(cur);
+  const list=document.getElementById('history-list'); list.innerHTML='';
+  logs.slice().reverse().forEach(l=>{
+    const d=new Date(l.t);
+    const el=document.createElement('div'); el.style.padding='6px 0';
+    el.innerHTML = `<div><strong>${l.device}</strong> — ${l.minutes} min <div class="muted" style="font-size:12px">${d.toLocaleString()}</div></div>`;
+    const del=document.createElement('button'); del.textContent='Delete'; del.className='btn-ghost'; del.style.marginLeft='8px';
+    del.onclick=()=>{saveLogs(cur,logs.filter(x=>x.id!==l.id)); renderHistory(); renderHourlySummary(); renderChart(); updateStats();}
+    el.appendChild(del); list.appendChild(el);
+  });
+}
+
+// ---------------------------- Stats & chart ----------------------------
+function updateStats(){
+  const cur = sessionStorage.getItem('ecotech_current'); 
+  if(!cur) return;
+  const logs = loadLogs(cur); 
+  const p = loadProfile(cur);
+
+  // Today CO₂: sum of emissions from logs recorded today only
+  const today = logs.filter(l => new Date(l.t).toDateString() === new Date().toDateString());
+  const todayCO2 = today.reduce((a, l) => {
+    return a + calculateCO2(l.minutes, p.defaultPower || 5, p.emissionFactor || 0.5);
+}, 0).toFixed(3);
+
+  document.getElementById('today-co2').textContent = todayCO2 + ' kg';
+
+  // Monthly estimate: average daily CO₂ × 30 days
+  let monthlyEstimate;
+  if(logs.length === 0){
+    monthlyEstimate = 0;
+  } else {
+    const logsByDay = {};
+    logs.forEach(l => {
+      const dateStr = new Date(l.t).toDateString();
+      if(!logsByDay[dateStr]) logsByDay[dateStr] = 0;
+      logsByDay[dateStr] += calculateCO2(l.minutes, p.defaultPower || 5, p.emissionFactor || 0.5);
+    });
+    const uniqueDays = Object.keys(logsByDay);
+    const totalCO2 = Object.values(logsByDay).reduce((a, b) => a + b, 0);
+    const averageDailyEmissions = totalCO2 / uniqueDays.length;
+    monthlyEstimate = averageDailyEmissions * 30;
+  }
+
+  document.getElementById('monthly-co2').textContent = monthlyEstimate.toFixed(2) + ' kg (est.)';
+  document.getElementById('last-log').textContent = logs.length ? logs[logs.length-1].minutes + ' min (' + logs[logs.length-1].device + ')' : '—';
+}
+
+function renderChart(){
+  const cur=sessionStorage.getItem('ecotech_current'); if(!cur) return;
+  const logs=loadLogs(cur);
+  const canvas=document.getElementById('usageChart'); if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  // Handle CSS sizing and devicePixelRatio so drawing matches visual size
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+  canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+  // Set transform so we can draw using CSS pixels
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0,0,rect.width,rect.height);
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const days = Array(daysInMonth).fill(0);
+  logs.forEach(l => {
+    const d = new Date(l.t);
+    if (d.getFullYear() === year && d.getMonth() === month) {
+      const day = d.getDate() - 1; // 0-based
+      days[day] += l.minutes;
+    }
+  });
+  const max = Math.max(...days, 10);
+  const barW = rect.width / daysInMonth;
+  days.forEach((v, i) => {
+    const x = i * barW;
+    const y = rect.height * (1 - v / max);
+    ctx.fillStyle = 'rgba(34,197,94,0.6)';
+    ctx.fillRect(x + 1, y, Math.max(1, barW - 2), rect.height - y - 1);
+    // Label day and weekday
+    const dayDate = new Date(year, month, i + 1);
+    const dayNum = dayDate.getDate();
+    const weekday = dayDate.toLocaleDateString('en-US', { weekday: 'short' });
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '10px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText(dayNum, x + barW / 2, rect.height - 5);
+    ctx.fillText(weekday, x + barW / 2, rect.height - 20);
+  });
+}
+
+// ---------------------------- Responsive chart redraw ----------------------------
+let _chartResizeTimer = null;
+function scheduleChartRedraw(){
+  if(_chartResizeTimer) clearTimeout(_chartResizeTimer);
+  _chartResizeTimer = setTimeout(()=>{ try{ renderChart(); }catch(e){} }, 150);
+}
+window.addEventListener('resize', scheduleChartRedraw);
+window.addEventListener('orientationchange', scheduleChartRedraw);
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) scheduleChartRedraw(); });
+
+// Device power auto-update based on device type
+const devicePowerMap={mobile:5,tablet:10,laptop:50};
+document.getElementById('device-type').addEventListener('change',()=>{
+  const device=document.getElementById('device-type').value;
+  document.getElementById('power-w').value=devicePowerMap[device]||5;
+});
+
+// ---------------------------- Carbon calculator ----------------------------
+document.getElementById('calc-co2').addEventListener('click', () => {
+    const cur = sessionStorage.getItem('ecotech_current'); 
+    if(!cur) return alert('Login');
+    const p = loadProfile(cur) || {};
+    const dailyHours = parseFloat(document.getElementById('daily-hours').value) || 0;
+    const power = p.defaultPower || 5;
+    const emissionFactor = p.emissionFactor || 0.5;
+
+    // Use calculateCO2 helper (minutes = hours * 60)
+    const co2 = calculateCO2(dailyHours * 60, power, emissionFactor);
+
+    document.getElementById('calc-result').textContent = co2.toFixed(3) + ' kg CO₂/day';
+});
+
+
+document.getElementById('save-daily').addEventListener('click',()=>{
+  const cur=sessionStorage.getItem('ecotech_current'); if(!cur) return;
+  const data={defaultPower:parseFloat(document.getElementById('power-w').value)||5,
+              dailyHours:parseFloat(document.getElementById('daily-hours').value)||1,
+              emissionFactor:parseFloat(document.getElementById('emission-factor').value)||0.5,
+              display:document.getElementById('display-name').textContent||cur};
+  saveProfile(cur,data);
+  showToast('Profile saved');
+});
+
+// ---------------------------- Hourly summary (automated) ----------------------------
+function renderHourlySummary(){
+  const cur=sessionStorage.getItem('ecotech_current'); if(!cur) return;
+  const summary=document.getElementById('hour-summary'); summary.innerHTML='';
+  const logs=loadLogs(cur);
+  const arr=Array(24).fill(0);
+  logs.forEach(l=>{arr[new Date(l.t).getHours()]+=l.minutes;});
+  arr.forEach((v,h)=>{
+    const time=new Date(); time.setHours(h,0,0,0);
+    const timeStr=time.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    const card=document.createElement('div');
+    card.style.cssText='background:var(--card);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);text-align:center';
+    card.innerHTML=`<div class="muted" style="font-size:11px">${timeStr}</div><div style="font-size:16px;margin-top:4px">${v}<span style="font-size:11px">m</span></div>`;
+    summary.appendChild(card);
+  });
+}
+
+document.getElementById('clear-history').addEventListener('click',()=>{
+  const cur=sessionStorage.getItem('ecotech_current'); if(!cur) return;
+  if(confirm('Delete all logs?')){saveLogs(cur,[]); renderHistory(); renderHourlySummary(); renderChart(); updateStats();}
+});
+
+// ---------------------------- Notifications ----------------------------
+let notifInterval=null;
+document.getElementById('start-notifs').addEventListener('click',()=>{
+  const mins=parseInt(document.getElementById('notif-mins').value)||60;
+  if(notifInterval) clearInterval(notifInterval);
+  notifInterval=setInterval(()=>{showToast('Reminder: Check your device usage and save energy!');},mins*60000);
+  showToast('Reminders started every '+mins+' min');
+});
+document.getElementById('stop-notifs').addEventListener('click',()=>{
+  clearInterval(notifInterval); notifInterval=null; showToast('Reminders stopped');
+});
+
+// ---------------------------- CSV Export ----------------------------
+document.getElementById('export-csv').addEventListener('click',()=>{
+  const cur=sessionStorage.getItem('ecotech_current'); if(!cur) return;
+  const logs=loadLogs(cur);
+  let csv='Device,Minutes,Timestamp\n';
+  logs.forEach(l=>{csv+=`${l.device},${l.minutes},${new Date(l.t).toISOString()}\n`;});
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ecotech_logs.csv'; a.click();
+  showToast('CSV exported');
+});
+
+// ---------------------------- Toast ----------------------------
+function showToast(msg){
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.remove();},3500);
+}
+
+// ---------------------------- Start ----------------------------
+window.onload=()=>{
+  const cur=sessionStorage.getItem('ecotech_current');
+  if(cur) initApp();
+}
+</script>
+</body>
+</html>
