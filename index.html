@@ -426,6 +426,22 @@ input, textarea, button, label, small, .muted { color: #ffffff !important; }
       <button class="btn-ghost" onclick="showSection('app'); setActiveNav('nav-dashboard')">← Back to Dashboard</button>
     </div>
     <p class="muted">All logged usage entries (click delete to remove one)</p>
+    <div style="margin:10px 0; display:flex; gap:8px; align-items:center;">
+  <input 
+  type="date" 
+  id="history-date" 
+  style="
+    padding:8px;
+    border-radius:8px;
+    background:white;
+    color:black !important;
+    border:1px solid #ccc;
+  "
+>
+  <button class="btn" id="search-history-date">Search Date</button>
+  <button class="btn-ghost" id="show-all-history">Show All</button>
+</div>
+    
     <div id="history-list" style="margin-top:10px;max-height:320px;overflow:auto"></div>
     <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
     <h4>Hourly summary (automated)</h4>
@@ -935,7 +951,48 @@ function renderHistory(){
     el.appendChild(del); list.appendChild(el);
   });
 }
+function filterHistoryByDate() {
+  const cur = sessionStorage.getItem('ecotech_current');
+  if (!cur) return;
 
+  const selectedDate = document.getElementById('history-date').value;
+  if (!selectedDate) {
+    alert('Please select a date');
+    return;
+  }
+
+  const logs = loadLogs(cur);
+  const list = document.getElementById('history-list');
+  list.innerHTML = '';
+
+  const filteredLogs = logs.filter(l => {
+    const logDate = new Date(l.t).toISOString().split('T')[0];
+    return logDate === selectedDate;
+  });
+
+  if (filteredLogs.length === 0) {
+    list.innerHTML = `<p class="muted">No history found for this date.</p>`;
+    return;
+  }
+
+  filteredLogs.reverse().forEach(l => {
+    const d = new Date(l.t);
+
+    const el = document.createElement('div');
+    el.style.padding = '6px 0';
+
+    el.innerHTML = `
+      <div>
+        <strong>${l.device}</strong> — ${l.minutes} min
+        <div class="muted" style="font-size:12px">
+          ${d.toLocaleString()}
+        </div>
+      </div>
+    `;
+
+    list.appendChild(el);
+  });
+}
 // ---------------------------- Stats & chart ----------------------------
 function updateStats(){
   const cur = sessionStorage.getItem('ecotech_current'); 
@@ -1076,7 +1133,9 @@ function renderHourlySummary(){
     summary.appendChild(card);
   });
 }
+document.getElementById('search-history-date').addEventListener('click', filterHistoryByDate);
 
+document.getElementById('show-all-history').addEventListener('click', renderHistory);
 document.getElementById('clear-history').addEventListener('click',()=>{
   const cur=sessionStorage.getItem('ecotech_current'); if(!cur) return;
   if(confirm('Delete all logs?')){saveLogs(cur,[]); renderHistory(); renderHourlySummary(); renderChart(); updateStats();}
