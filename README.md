@@ -19,7 +19,6 @@ EcoTechTracker is a web app that tracks daily device usage and estimates the car
 
 ##  Built By
 - Sahera Shaikh  
-- Krishna Marathe
-- Shruti Pawar
+
 
 
